@@ -16,3 +16,4 @@ jobs:
       - run: npm test
       - run: npm run example
       - run: npm pack --dry-run
+      - run: npm run check:package

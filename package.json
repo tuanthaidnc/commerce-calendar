@@ -7,9 +7,9 @@
   "homepage": "https://github.com/tuanthaidnc/commerce-calendar#readme",
   "type": "module",
   "exports": {".": {"types": "./index.d.ts", "import": "./index.js"}},
-  "files": ["index.js", "index.d.ts", "README.md", "LICENSE"],
+  "files": ["index.js", "index.d.ts", "*.md", "docs", "LICENSE"],
   "license": "MIT",
   "engines": {"node": ">=20"},
-  "scripts": {"test": "node --test", "example": "node examples/estimate.mjs"},
+  "scripts": {"test": "node --test", "example": "node examples/estimate.mjs", "check:package": "node scripts/check-package.mjs"},
   "private": true
 }

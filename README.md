@@ -19,6 +19,7 @@ Clone the repository, then run from its directory (no install needed):
 ```sh
 npm test
 npm run example
+npm run check:package
 ```
 
 ```js
@@ -69,6 +70,10 @@ resolver. This library has not replaced or changed any live promise.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 MIT licensed. Report reproducible bugs through the repository's Issues tab.
+
+See the [API reference](docs/API.md) and [maintenance policy](MAINTAINERS.md).
+`check:package` installs the actual tarball into a separate consumer and checks
+its public imports. It is a reproducibility check, not external adoption.
 
 Maintained by [Thái Văn Tuấn](https://github.com/tuanthaidnc), who operates
 [Wondroot](https://wondroot.com). See the [roadmap](ROADMAP.md) for proposed work

@@ -1,5 +1,7 @@
 # commerce-calendar
 
+[![Tests](https://github.com/tuanthaidnc/commerce-calendar/actions/workflows/test.yml/badge.svg)](https://github.com/tuanthaidnc/commerce-calendar/actions/workflows/test.yml)
+
 Business-day calendars and staged delivery estimates for small commerce tools.
 ES modules, TypeScript declarations, no runtime dependencies. Requires Node 20+
 or a modern JavaScript runtime with Intl time-zone support.
@@ -48,7 +50,7 @@ const result = estimateDelivery({
   requires nonnegative integer `min <= max`. Zero-day stages are allowed.
   Missing processing/shipping returns null; malformed supplied values throw.
 - Search is bounded to 36,600 civil days; longer/unreachable searches throw.
-  Civil dates must be four-digit ISO years. Results are estimates, not dispatch
+  Civil dates use years 0001–9999. Results are estimates, not dispatch
   evidence or a carrier promise.
 
 Not included: order cutoffs, capacity scheduling, carrier APIs, regional holiday

@@ -44,3 +44,20 @@ test('calendar snapshots caller arrays', () => {
   assert.equal(c.isBusinessDay('2026-09-21'),true);
   assert.equal(c.isBusinessDay('2026-09-22'),false);
 });
+
+test('rejects midnight overflow rather than normalizing to the next day', () => {
+  assert.throws(() => calendar.dateAt('2026-09-22T24:00:00Z'), RangeError);
+  assert.throws(() => calendar.dateAt('2026-09-22T23:60:00Z'), RangeError);
+  assert.throws(() => calendar.dateAt('2026-09-22T23:59:60Z'), RangeError);
+});
+test('rejects sparse calendar arrays', () => {
+  for (const key of ['workingWeekdays','recurringHolidays','closedDates']) {
+    assert.throws(() => createCalendar({timeZone:'UTC',[key]:new Array(1)}));
+  }
+});
+test('supports padded early years and rejects unsupported year zero', () => {
+  const utc = createCalendar({timeZone:'UTC'});
+  assert.equal(utc.dateAt('0099-01-01T12:00:00Z'),'0099-01-01');
+  assert.throws(() => utc.dateAt('0000-01-01T12:00:00Z'));
+  assert.throws(() => utc.isBusinessDay('0000-01-01'));
+});

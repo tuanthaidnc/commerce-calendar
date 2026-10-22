@@ -6,7 +6,7 @@ function parseDate(value) {
     throw new TypeError('Expected a civil date in YYYY-MM-DD format');
   }
   const date = new Date(`${value}T00:00:00.000Z`);
-  if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== value) {
+  if (!Number.isFinite(date.getTime()) || value.startsWith('0000-') || date.toISOString().slice(0, 10) !== value) {
     throw new RangeError('Invalid civil date');
   }
   return date;
@@ -23,31 +23,42 @@ function count(value) {
 export function createCalendar({timeZone, workingWeekdays = [1, 2, 3, 4, 5], recurringHolidays = [], closedDates = []} = {}) {
   if (typeof timeZone !== 'string' || !timeZone) throw new TypeError('timeZone is required');
   const formatter = new Intl.DateTimeFormat('en-US', {
-    timeZone, year: 'numeric', month: '2-digit', day: '2-digit', calendar: 'gregory', numberingSystem: 'latn'
+    timeZone, era: 'short', year: 'numeric', month: '2-digit', day: '2-digit', calendar: 'gregory', numberingSystem: 'latn'
   });
   if (!Array.isArray(workingWeekdays) || !workingWeekdays.length ||
-      workingWeekdays.some(day => !Number.isInteger(day) || day < 0 || day > 6)) {
+      Array.from(workingWeekdays).some(day => !Number.isInteger(day) || day < 0 || day > 6)) {
     throw new RangeError('workingWeekdays must contain integers from 0 (Sunday) to 6');
   }
   if (!Array.isArray(recurringHolidays) || !Array.isArray(closedDates)) throw new TypeError('Holidays must be arrays');
   const weekdays = new Set(workingWeekdays);
-  const recurring = new Set(recurringHolidays.map(value => {
+  const recurring = new Set(Array.from(recurringHolidays, value => {
     // Leap year permits an explicitly configured February 29.
     parseDate(`2000-${value}`);
     return value;
   }));
-  const closed = new Set(closedDates.map(value => {parseDate(value); return value;}));
+  const closed = new Set(Array.from(closedDates, value => {parseDate(value); return value;}));
 
   function dateAt(instant) {
     if (!(instant instanceof Date) && !(typeof instant === 'string' &&
         /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/.test(instant))) {
       throw new TypeError('Expected a Date or ISO timestamp with explicit offset');
     }
-    if (typeof instant === 'string') parseDate(instant.slice(0, 10));
+    if (typeof instant === 'string') {
+      parseDate(instant.slice(0, 10));
+      const clock = instant.slice(11).match(/^(\d{2}):(\d{2})(?::(\d{2}))?/);
+      if (+clock[1] > 23 || +clock[2] > 59 || +(clock[3] ?? 0) > 59) {
+        throw new RangeError('Invalid timestamp clock');
+      }
+    }
     const date = instant instanceof Date ? new Date(instant.getTime()) : new Date(instant);
     if (!Number.isFinite(date.getTime())) throw new RangeError('Invalid instant');
     const parts = Object.fromEntries(formatter.formatToParts(date).map(p => [p.type, p.value]));
-    return `${parts.year}-${parts.month}-${parts.day}`;
+    const civil = `${parts.year.padStart(4, '0')}-${parts.month}-${parts.day}`;
+    // Intl formats BCE years without a signed ISO year; disallow those dates.
+    const year = date.getUTCFullYear();
+    if (year < 1 || year > 9999 || parts.era !== 'AD') throw new RangeError('Instant year outside supported range');
+    parseDate(civil);
+    return civil;
   }
   function isBusinessDay(value) {
     const date = parseDate(value);

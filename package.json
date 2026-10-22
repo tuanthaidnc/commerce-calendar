@@ -1,0 +1,12 @@
+{
+  "name": "commerce-calendar",
+  "version": "0.1.0",
+  "description": "Explicit business-day calendars and staged delivery estimates without runtime dependencies",
+  "type": "module",
+  "exports": {".": {"types": "./index.d.ts", "import": "./index.js"}},
+  "files": ["index.js", "index.d.ts", "README.md", "LICENSE"],
+  "license": "MIT",
+  "engines": {"node": ">=20"},
+  "scripts": {"test": "node --test", "example": "node examples/estimate.mjs"},
+  "private": true
+}

@@ -1,0 +1,20 @@
+name: Calendar bug
+description: Report a reproducible calendar or delivery-estimate error
+body:
+  - type: markdown
+    attributes:
+      value: Use synthetic examples only. Report sensitive vulnerabilities through private security reporting.
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Include library version, runtime version, timestamp, time zone, calendar configuration and timing ranges.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual dates
+      description: Explain how you checked the expected dates independently.
+    validations:
+      required: true

@@ -1,0 +1,15 @@
+name: Feature proposal
+description: Describe a real calendar problem and proposed behavior
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and example
+      description: Describe your use case with synthetic inputs and desired outputs.
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility
+      description: Explain how this should interact with existing counting semantics.

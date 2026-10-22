@@ -69,3 +69,7 @@ resolver. This library has not replaced or changed any live promise.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 MIT licensed. Report reproducible bugs through the repository's Issues tab.
+
+Maintained by [Thái Văn Tuấn](https://github.com/tuanthaidnc), who operates
+[Wondroot](https://wondroot.com). See the [roadmap](ROADMAP.md) for proposed work
+and current limits. Feedback with reproducible synthetic examples is welcome.
